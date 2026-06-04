@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gia An Le — Luxury Marketing Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #0a0a0a;
+    --ivoire: #f5f0e8;
+    --dior-grey: #c8bfb2;
+    --or: #b89b6a;
+    --blanc: #fdfaf5;
+    --accent: #8b7355;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--noir);
+    color: var(--ivoire);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CURSOR (desktop only) ─── */
+  .cursor { width:8px;height:8px;background:var(--or);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference; }
+  .cursor-ring { width:36px;height:36px;border:1px solid rgba(184,155,106,0.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all 0.15s ease;transform:translate(-14px,-14px); }
+
+  /* ─── GRAIN ─── */
+  body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:0.4; }
+
+  /* ─── PROGRESS BAR ─── */
+  #progressBar { position:fixed;top:0;left:0;height:1px;background:linear-gradient(to right,var(--or),transparent);width:0%;z-index:999;transition:width 0.1s; }
+
+  /* ─── LOADER ─── */
+  #loader { position:fixed;inset:0;background:var(--noir);display:flex;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.6s ease 0.8s,visibility 0s ease 1.4s; }
+  #loader.hidden { opacity:0;visibility:hidden; }
+  #loaderText { font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,32px);letter-spacing:8px;color:var(--or);font-weight:400; }
+  #loaderText span { display:inline-block;opacity:0;animation:fadeIn 0.4s ease forwards; }
+  @keyframes fadeIn { to{opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)} }
+
+  /* ─── NAV ─── */
+  nav {
+    position:fixed;top:0;width:100%;
+    padding:24px 60px;
+    display:flex;justify-content:space-between;align-items:center;
+    z-index:500;
+    background:linear-gradient(to bottom,rgba(10,10,10,0.85) 0%,transparent 100%);
+    backdrop-filter:blur(2px);
+  }
+  .nav-logo { font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:4px;color:var(--or);font-weight:400;text-decoration:none; }
+  .nav-links { display:flex;gap:36px;list-style:none;align-items:center; }
+  .nav-links a { font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--dior-grey);text-decoration:none;transition:color 0.3s;font-weight:400; }
+  .nav-links a:hover { color:var(--or); }
+  .nav-cv { font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--or) !important;text-decoration:none;border:1px solid rgba(184,155,106,0.4);padding:8px 18px;transition:all 0.3s; }
+  .nav-cv:hover { background:rgba(184,155,106,0.1) !important;border-color:var(--or); }
+
+  /* hamburger */
+  .nav-toggle { display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none; }
+  .nav-toggle span { display:block;width:24px;height:1px;background:var(--or);transition:all 0.3s; }
+  .nav-toggle.open span:nth-child(1) { transform:translateY(6px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity:0; }
+  .nav-toggle.open span:nth-child(3) { transform:translateY(-6px) rotate(-45deg); }
+
+  /* mobile drawer */
+  .nav-drawer {
+    position:fixed;inset:0;background:rgba(10,10,10,0.97);
+    z-index:490;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;
+    opacity:0;visibility:hidden;transition:all 0.3s ease;
+  }
+  .nav-drawer.open { opacity:1;visibility:visible; }
+  .nav-drawer a { font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--dior-grey);text-decoration:none;transition:color 0.3s; }
+  .nav-drawer a:hover { color:var(--or); }
+  .nav-drawer .drawer-cv { color:var(--or);border:1px solid rgba(184,155,106,0.4);padding:12px 28px;margin-top:8px; }
+
+  /* ─── HERO ─── */
+  #hero { height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden; }
+  .hero-bg-lines { position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(184,155,106,0.04) 79px,rgba(184,155,106,0.04) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(184,155,106,0.04) 79px,rgba(184,155,106,0.04) 80px); }
+  .hero-ornament { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(600px,90vw);height:min(600px,90vw);border:1px solid rgba(184,155,106,0.08);border-radius:50%;animation:pulse-ring 6s ease-in-out infinite; }
+  .hero-ornament::before { content:'';position:absolute;inset:40px;border:1px solid rgba(184,155,106,0.05);border-radius:50%;animation:pulse-ring 6s ease-in-out infinite reverse; }
+  @keyframes pulse-ring { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.03);opacity:0.5} }
+  .hero-content { position:relative;z-index:2;text-align:center;padding:0 20px; }
+  .hero-eyebrow { font-size:10px;font-weight:400;letter-spacing:6px;color:var(--or);text-transform:uppercase;opacity:0;animation:fadeUp 1s ease 0.3s forwards; }
+  .hero-name { font-family:'Cormorant Garamond',serif;font-size:clamp(52px,10vw,120px);font-weight:300;letter-spacing:-2px;line-height:0.9;margin:16px 0 20px;opacity:0;animation:fadeUp 1.2s ease 0.6s forwards; }
+  .hero-name em { font-style:italic;color:var(--or); }
+  .hero-sub { font-size:clamp(9px,1.5vw,11px);letter-spacing:8px;font-weight:300;color:var(--dior-grey);text-transform:uppercase;opacity:0;animation:fadeUp 1s ease 1s forwards;margin-bottom:60px; }
+  .hero-divider { width:1px;height:60px;background:linear-gradient(to bottom,var(--or),transparent);margin:0 auto;opacity:0;animation:fadeIn 1s ease 1.5s forwards; }
+  .hero-scroll { position:absolute;bottom:32px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:4px;color:var(--dior-grey);text-transform:uppercase;opacity:0;animation:fadeIn 1s ease 2s forwards;text-align:center; }
+  .scroll-line { width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--or));margin:10px auto 0;animation:scrollPulse 2s ease-in-out infinite; }
+  @keyframes scrollPulse { 0%{opacity:0;transform:scaleY(0) translateY(-20px)}50%{opacity:1;transform:scaleY(1) translateY(0)}100%{opacity:0;transform:scaleY(1) translateY(20px)} }
+
+  /* ─── SECTION BASE ─── */
+  .section-wrap { padding:100px 80px;max-width:1400px;margin:0 auto; }
+  .section-label { font-size:9px;letter-spacing:6px;color:var(--or);text-transform:uppercase;margin-bottom:60px;display:flex;align-items:center;gap:20px; }
+  .section-label::after { content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(184,155,106,0.4),transparent); }
+
+  /* ─── ABOUT ─── */
+  #about { padding:100px 80px;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center; }
+  .about-visual { position:relative;height:480px; }
+  .about-frame { position:absolute;inset:0;border:1px solid rgba(184,155,106,0.2); }
+  .about-frame::before { content:'';position:absolute;top:20px;left:20px;right:-20px;bottom:-20px;border:1px solid rgba(184,155,106,0.08); }
+  .about-initials { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:clamp(80px,12vw,140px);font-weight:300;color:rgba(184,155,106,0.08);letter-spacing:-8px;pointer-events:none;white-space:nowrap; }
+  .about-stats { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,155,106,0.1);border:1px solid rgba(184,155,106,0.1);margin-top:30px; }
+  .stat-item { background:var(--noir);padding:20px;text-align:center; }
+  .stat-num { font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,36px);font-weight:300;color:var(--or);line-height:1; }
+  .stat-label { font-size:8px;letter-spacing:2px;color:var(--dior-grey);text-transform:uppercase;margin-top:6px; }
+  .about-text h2 { font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,56px);font-weight:300;line-height:1.1;margin-bottom:28px; }
+  .about-text h2 em { font-style:italic;color:var(--or); }
+  .about-text p { font-size:13px;line-height:2;color:var(--dior-grey);margin-bottom:18px; }
+  .tags { display:flex;flex-wrap:wrap;gap:8px;margin-top:28px; }
+  .tag { font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(184,155,106,0.3);color:var(--dior-grey);transition:all 0.3s; }
+  .tag:hover { border-color:var(--or);color:var(--or);background:rgba(184,155,106,0.05); }
+
+  /* ─── EXPERIENCE ─── */
+  #experience { padding:100px 80px;max-width:1400px;margin:0 auto; }
+  .timeline { position:relative;padding-left:2px; }
+  .timeline::before { content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--or),rgba(184,155,106,0.08)); }
+
+  .exp-entry { display:grid;grid-template-columns:180px 1fr;gap:56px;padding:0 0 72px 48px;position:relative; }
+  .exp-entry::before { content:'';position:absolute;left:-5px;top:6px;width:10px;height:10px;border:1px solid var(--or);background:var(--noir);border-radius:50%; }
+
+  .exp-date { padding-top:2px; }
+  .exp-period { font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;color:var(--or);line-height:1.7; }
+  .exp-duration { font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(184,155,106,0.45);margin-top:8px; }
+  .exp-location { font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dior-grey);margin-top:14px;display:flex;align-items:center;gap:8px; }
+  .exp-location::before { content:'';display:inline-block;width:12px;height:1px;background:rgba(184,155,106,0.4);flex-shrink:0; }
+
+  .exp-company-badge { display:inline-block;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--or);border:1px solid rgba(184,155,106,0.25);padding:5px 14px;margin-bottom:18px; }
+  .exp-company { font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,40px);font-weight:300;line-height:1.1;margin-bottom:6px; }
+  .exp-role { font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dior-grey);margin-bottom:24px; }
+  .exp-divider { width:40px;height:1px;background:linear-gradient(to right,var(--or),transparent);margin-bottom:24px; }
+  .exp-bullets { list-style:none;display:flex;flex-direction:column;gap:14px; }
+  .exp-bullets li { font-size:12px;line-height:1.9;color:var(--dior-grey);display:flex;gap:14px; }
+  .exp-bullets li::before { content:'—';color:var(--or);flex-shrink:0;font-family:'Cormorant Garamond',serif;font-size:14px; }
+  .exp-tags { display:flex;flex-wrap:wrap;gap:7px;margin-top:24px; }
+  .exp-tag { font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(184,155,106,0.2);color:rgba(184,155,106,0.55); }
+
+  /* skills & edu inside experience */
+  .competency-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(184,155,106,0.1);margin-top:0; }
+  .competency-group { background:var(--noir);padding:32px 28px; }
+  .competency-title { font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--or);margin-bottom:18px; }
+  .competency-list { display:flex;flex-direction:column;gap:10px; }
+  .competency-item { font-size:11px;color:var(--dior-grey);display:flex;align-items:center;gap:10px; }
+  .competency-item::before { content:'';width:14px;height:1px;background:rgba(184,155,106,0.3);flex-shrink:0; }
+
+  .edu-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,155,106,0.1); }
+  .edu-item { background:var(--noir);padding:36px 32px;position:relative;overflow:hidden; }
+  .edu-item::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--or),transparent); }
+  .edu-year { font-family:'Cormorant Garamond',serif;font-size:clamp(40px,5vw,56px);font-weight:300;color:rgba(184,155,106,0.07);line-height:1;margin-bottom:-8px; }
+  .edu-degree { font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2vw,24px);font-weight:400;line-height:1.3;margin-bottom:8px; }
+  .edu-school { font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--or);margin-bottom:6px; }
+  .edu-period { font-size:9px;letter-spacing:1px;color:var(--dior-grey); }
+
+  /* ─── PROJECTS ─── */
+  #projects { padding:100px 80px;max-width:1400px;margin:0 auto; }
+  .projects-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(184,155,106,0.1); }
+  .project-card { background:var(--noir);position:relative;overflow:hidden;cursor:none;transition:all 0.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .project-card::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,155,106,0.05) 0%,transparent 60%);opacity:0;transition:opacity 0.4s; }
+  .project-card:hover::before { opacity:1; }
+  .project-card:hover { background:#0f0f0f; }
+  .project-inner { padding:44px 36px;min-height:360px;display:flex;flex-direction:column;justify-content:space-between; }
+  .project-number { font-family:'Cormorant Garamond',serif;font-size:clamp(52px,6vw,72px);font-weight:300;color:rgba(184,155,106,0.08);line-height:1;transition:color 0.4s; }
+  .project-card:hover .project-number { color:rgba(184,155,106,0.15); }
+  .project-brand { font-size:9px;letter-spacing:4px;color:var(--or);text-transform:uppercase;margin-bottom:10px; }
+  .project-title { font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.2vw,26px);font-weight:400;line-height:1.2;margin-bottom:14px; }
+  .project-desc { font-size:11px;line-height:1.8;color:var(--dior-grey); }
+  .project-grade { display:inline-block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--or);border:1px solid rgba(184,155,106,0.3);padding:6px 14px;margin-top:14px;transition:all 0.3s; }
+  .project-card:hover .project-grade { background:rgba(184,155,106,0.1);border-color:var(--or); }
+  .project-arrow { position:absolute;bottom:36px;right:36px;font-size:18px;color:rgba(184,155,106,0.3);transform:rotate(-45deg);transition:all 0.3s; }
+  .project-card:hover .project-arrow { color:var(--or);transform:rotate(-45deg) translate(4px,-4px); }
+  .project-card.clickable .project-arrow { color:rgba(184,155,106,0.5); }
+  .project-card.clickable:hover .project-arrow { color:var(--or);transform:rotate(-45deg) translate(4px,-4px); }
+  .open-label { position:absolute;bottom:36px;left:36px;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(184,155,106,0.4);transition:color 0.3s; }
+  .project-card.clickable:hover .open-label { color:var(--or); }
+  .project-card.featured { grid-column:1/-1;background:linear-gradient(135deg,#0f0e0c 0%,#0a0a0a 100%);border-top:1px solid rgba(184,155,106,0.15); }
+  .project-card.featured .project-inner { min-height:auto;flex-direction:row;align-items:center;gap:60px;padding:56px 72px; }
+  .featured-text { flex:1; }
+  .featured-visual { flex:0 0 260px;height:180px;border:1px solid rgba(184,155,106,0.15);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden; }
+  .featured-visual::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,155,106,0.05),transparent); }
+  .featured-visual-text { font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;color:rgba(184,155,106,0.15);font-style:italic; }
+
+  /* ─── MODAL ─── */
+  .modal-overlay { position:fixed;inset:0;background:rgba(8,8,8,0.95);z-index:5000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.4s ease;backdrop-filter:blur(8px);overflow-y:auto;padding:40px 16px; }
+  .modal-overlay.open { opacity:1;visibility:visible; }
+  .modal-content { position:relative;background:var(--noir);border:1px solid rgba(184,155,106,0.2);max-width:860px;width:100%;max-height:88vh;overflow-y:auto; }
+  .modal-header { padding:48px 48px 32px;border-bottom:1px solid rgba(184,155,106,0.1);display:flex;justify-content:space-between;align-items:flex-start; }
+  .modal-title { font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:300;line-height:1.1; }
+  .modal-close { font-size:22px;color:var(--or);cursor:pointer;transition:color 0.3s;border:none;background:none;padding:4px;flex-shrink:0; }
+  .modal-close:hover { color:var(--ivoire); }
+  .modal-body { padding:32px 48px 48px; }
+  .modal-section { margin-bottom:36px; }
+  .modal-section-title { font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--ivoire);margin-bottom:18px;text-transform:uppercase;letter-spacing:2px; }
+  .modal-text p { font-size:13px;line-height:2;color:var(--dior-grey);margin-bottom:14px; }
+  .modal-text strong { color:var(--ivoire);font-weight:400; }
+  .modal-highlight { font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--or);margin:36px 0;padding:28px 0;border-top:1px solid rgba(184,155,106,0.1);border-bottom:1px solid rgba(184,155,106,0.1); }
+
+  /* ─── CONTACT ─── */
+  #contact { text-align:center;padding:100px 40px 80px; }
+  .contact-text { font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,60px);font-weight:300;line-height:1.3;margin-bottom:52px; }
+  .contact-text em { font-style:italic;color:var(--or); }
+  .contact-links { display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:44px; }
+  .contact-link { font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dior-grey);text-decoration:none;transition:color 0.3s;border-bottom:1px solid rgba(184,155,106,0.2);padding-bottom:2px; }
+  .contact-link:hover { color:var(--or);border-bottom-color:var(--or); }
+  .btn-download { display:inline-block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--noir);background:var(--or);padding:15px 40px;text-decoration:none;transition:all 0.3s; }
+  .btn-download:hover { background:var(--accent); }
+
+  /* ─── FOOTER ─── */
+  footer { text-align:center;padding:32px 40px;border-top:1px solid rgba(184,155,106,0.08); }
+  footer p { font-size:9px;letter-spacing:3px;color:rgba(184,155,106,0.25);text-transform:uppercase; }
+
+  /* ─── REVEAL ─── */
+  .reveal { opacity:0;transform:translateY(24px);transition:all 0.8s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .reveal.visible { opacity:1;transform:translateY(0); }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE — Tablet landscape (≤1200px)
+  ══════════════════════════════════════ */
+  @media (max-width:1200px) {
+    .section-wrap, #about, #experience, #projects, #contact { padding-left:48px;padding-right:48px; }
+    #about { gap:64px; }
+    .exp-entry { grid-template-columns:150px 1fr;gap:40px; }
+    .competency-grid { grid-template-columns:1fr 1fr; }
+  }
+
+  /* ══════════════════════════════════════
+     Tablet portrait / iPad (≤1024px)
+  ══════════════════════════════════════ */
+  @media (max-width:1024px) {
+    nav { padding:20px 40px; }
+    .nav-links { gap:24px; }
+    #about { grid-template-columns:1fr;gap:52px;padding-top:80px;padding-bottom:80px; }
+    .about-visual { height:380px; }
+    .projects-grid { grid-template-columns:repeat(2,1fr); }
+    .project-card.featured .project-inner { flex-direction:column;gap:36px;padding:44px; }
+    .featured-visual { flex-basis:100%;height:160px; }
+    .edu-grid { grid-template-columns:1fr; }
+    .section-wrap, #about, #experience, #projects { padding-top:80px;padding-bottom:80px; }
+  }
+
+  /* ══════════════════════════════════════
+     Large phone / small tablet (≤768px)
+  ══════════════════════════════════════ */
+  @media (max-width:768px) {
+    body { cursor:auto; }
+    .cursor, .cursor-ring { display:none; }
+
+    nav { padding:18px 24px; }
+    .nav-links { display:none; }
+    .nav-toggle { display:flex; }
+
+    .section-wrap, #about, #experience, #projects { padding:60px 24px; }
+    #contact { padding:60px 24px 60px; }
+
+    #about { gap:40px; }
+    .about-visual { height:300px; }
+    .about-frame::before { right:-10px;bottom:-10px; }
+
+    .exp-entry { grid-template-columns:1fr;gap:16px;padding-left:32px;padding-bottom:52px; }
+    .exp-date { display:flex;flex-wrap:wrap;gap:12px;align-items:baseline; }
+    .exp-period { font-size:13px; }
+    .exp-duration, .exp-location { margin-top:0; }
+
+    .competency-grid { grid-template-columns:1fr; }
+
+    .projects-grid { grid-template-columns:1fr; }
+    .project-card.featured .project-inner { flex-direction:column;gap:28px;padding:32px 24px; }
+    .featured-visual { flex-basis:auto;height:120px; }
+    .project-inner { padding:32px 24px;min-height:300px; }
+    .project-arrow { bottom:24px;right:24px; }
+    .open-label { bottom:24px;left:24px; }
+
+    .modal-header { padding:32px 24px 20px; }
+    .modal-body { padding:20px 24px 32px; }
+    .modal-title { font-size:26px; }
+    .modal-highlight { font-size:15px; }
+
+    .contact-links { flex-direction:column;align-items:center;gap:16px; }
+
+    footer { padding:24px; }
+  }
+
+  /* ══════════════════════════════════════
+     Phone (≤480px)
+  ══════════════════════════════════════ */
+  @media (max-width:480px) {
+    nav { padding:16px 18px; }
+    .section-wrap, #about, #experience, #projects { padding:48px 18px; }
+    #contact { padding:48px 18px 48px; }
+
+    .hero-eyebrow { letter-spacing:4px; }
+    .hero-sub { letter-spacing:4px; }
+
+    .about-stats { grid-template-columns:1fr 1fr; }
+    .stat-item { padding:16px 10px; }
+
+    .exp-entry { padding-left:24px;padding-bottom:44px; }
+
+    .projects-grid { gap:0; }
+    .project-inner { min-height:260px;padding:28px 20px; }
+
+    .btn-download { padding:13px 28px;font-size:8px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor" class="cursor"></div>
+<div id="cursorRing" class="cursor-ring"></div>
+<div id="progressBar"></div>
+
+<!-- LOADER -->
+<div id="loader"><div id="loaderText"></div></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">GIA AN LE</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="An_Le_CV.pdf" download class="nav-cv">Download CV</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer">
+  <a href="#about" onclick="closeDrawer()">About</a>
+  <a href="#experience" onclick="closeDrawer()">Experience</a>
+  <a href="#projects" onclick="closeDrawer()">Projects</a>
+  <a href="#contact" onclick="closeDrawer()">Contact</a>
+  <a href="An_Le_CV.pdf" download class="drawer-cv" onclick="closeDrawer()">Download CV</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-lines"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Luxury Marketing Professional</div>
+    <h1 class="hero-name">Gia An <em>Le</em></h1>
+    <div class="hero-sub">Junior Marketing Manager</div>
+    <div class="hero-divider"></div>
+  </div>
+  <div class="hero-scroll">Scroll to explore<div class="scroll-line"></div></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-frame"></div>
+    <div class="about-initials">GA</div>
+    <div class="about-stats">
+      <div class="stat-item"><div class="stat-num">131</div><div class="stat-label">Followers (1 month)</div></div>
+      <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Event Sell-Out</div></div>
+      <div class="stat-item"><div class="stat-num">2x</div><div class="stat-label">Follower Growth</div></div>
+      <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">Industry Speakers</div></div>
+    </div>
+  </div>
+  <div class="about-text reveal">
+    <div class="section-label">Profile</div>
+    <h2>Results-driven <em>Luxury Marketing</em> Manager</h2>
+    <p>I build emotional connections between brands and their most valuable customers through strategic storytelling, experiential marketing, and community engagement. My work spans luxury hospitality, fashion retail, and high-net-worth consumer experiences.</p>
+    <p>Currently seeking to bring data-informed creativity and authentic luxury expertise to a maison within the LVMH Group. Fluent in English, Vietnamese, French, and Mandarin; based in Ho Chi Minh City with international experience in Dubai and Switzerland.</p>
+    <div class="tags">
+      <span class="tag">Digital Marketing</span>
+      <span class="tag">Brand Positioning</span>
+      <span class="tag">Event Strategy</span>
+      <span class="tag">Content Creation</span>
+      <span class="tag">Clienteling</span>
+      <span class="tag">Community Engagement</span>
+      <span class="tag">KPI Analysis</span>
+      <span class="tag">Hospitality</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Work Experience</div>
+
+  <div class="timeline">
+
+    <!-- Emirates -->
+    <div class="exp-entry reveal">
+      <div class="exp-date">
+        <div class="exp-period">Sep 2025<br/>— Mar 2026</div>
+        <div class="exp-duration">6 months</div>
+        <div class="exp-location">Dubai, UAE</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-company-badge">International Experience</div>
+        <div class="exp-company">Emirates Flight<br/>Catering</div>
+        <div class="exp-role">Assistant Manager, Event Intern &nbsp;·&nbsp; Customer Development</div>
+        <div class="exp-divider"></div>
+        <ul class="exp-bullets">
+          <li>Managed cross-functional coordination for 3 flagship international events and 1 major event — Dubai International Airshow, International Rugby 7s, Hero Dubai Desert Classic, and Flydubai Family Day — aligning 10+ internal departments under high-visibility conditions with zero brand incidents.</li>
+          <li>Delivered 100% accuracy on event documentation, trackers, and post-event visibility reports using Excel and Oracle ERP, supporting real-time decision-making for executive stakeholders in fast-paced luxury operations.</li>
+          <li>Maintained operational excellence under pressure, managing concurrent event deliverables with zero delays or stakeholder escalations.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag">Event Operations</span>
+          <span class="exp-tag">Cross-functional Leadership</span>
+          <span class="exp-tag">Oracle ERP</span>
+          <span class="exp-tag">Luxury Hospitality</span>
+          <span class="exp-tag">Stakeholder Management</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ngoi Sao Sang Vina -->
+    <div class="exp-entry reveal">
+      <div class="exp-date">
+        <div class="exp-period">Aug 2023<br/>— Aug 2024</div>
+        <div class="exp-duration">1 year</div>
+        <div class="exp-location">Ho Chi Minh, VN</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-company-badge">Brand Strategy</div>
+        <div class="exp-company">Ngoi Sao<br/>Sang Vina</div>
+        <div class="exp-role">Brand Executive &nbsp;·&nbsp; Marketing</div>
+        <div class="exp-divider"></div>
+        <ul class="exp-bullets">
+          <li>Developed and executed integrated social media strategy across Instagram and LinkedIn, driving +30% engagement rate and doubled followers while maintaining 100% brand consistency across 12+ monthly posts.</li>
+          <li>Conducted competitive landscape and influencer market analysis that informed 3 strategic campaign pivots, resulting in data-driven positioning for executive decision-making.</li>
+          <li>Executed end-to-end KOL/KOC outreach and partnership management, securing 10+ TikTok collaboration proposals monthly and coordinating product shoots that strengthened brand storytelling for premium consumer positioning.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag">Social Media Strategy</span>
+          <span class="exp-tag">KOL / KOC Management</span>
+          <span class="exp-tag">Brand Consistency</span>
+          <span class="exp-tag">Market Analysis</span>
+          <span class="exp-tag">Content Planning</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- La Ciana -->
+    <div class="exp-entry reveal">
+      <div class="exp-date">
+        <div class="exp-period">Dec 2022<br/>— Jul 2023</div>
+        <div class="exp-duration">8 months</div>
+        <div class="exp-location">Ho Chi Minh, VN</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-company-badge">Luxury Lifestyle</div>
+        <div class="exp-company">La Ciana</div>
+        <div class="exp-role">Marketing Executive &nbsp;·&nbsp; Marketing</div>
+        <div class="exp-divider"></div>
+        <ul class="exp-bullets">
+          <li>Directed seasonal product photoshoots and visual content production, ensuring 100% alignment between creative direction, styling, and premium brand positioning across digital platforms — Facebook, Instagram, and website.</li>
+          <li>Managed content calendar planning and multi-platform content distribution including monthly social posts, SEO-optimized blogs, and social media campaigns that strengthened brand voice and visual consistency in the luxury lifestyle segment.</li>
+          <li>Coordinated vendor partnerships and cross-functional collaboration with design and creative teams to produce campaign-ready visual assets on schedule and on-brand.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag">Visual Content Production</span>
+          <span class="exp-tag">Content Calendar</span>
+          <span class="exp-tag">SEO</span>
+          <span class="exp-tag">Campaign Management</span>
+          <span class="exp-tag">Vendor Coordination</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Education -->
+  <div style="margin-top:72px;" class="reveal">
+    <div class="section-label">Education</div>
+    <div class="edu-grid">
+      <div class="edu-item">
+        <div class="edu-year">2024</div>
+        <div class="edu-degree">MSc in Luxury Management<br/>&amp; Guest Experience</div>
+        <div class="edu-school">Glion Institute of Higher Education</div>
+        <div class="edu-period">Sep 2024 — Current</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-year">2023</div>
+        <div class="edu-degree">Bachelor's in<br/>Digital Marketing</div>
+        <div class="edu-school">RMIT University Vietnam</div>
+        <div class="edu-period">Sep 2019 — Apr 2023</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Skills -->
+  <div style="margin-top:1px;" class="reveal">
+    <div class="competency-grid">
+      <div class="competency-group">
+        <div class="competency-title">Marketing &amp; Strategy</div>
+        <div class="competency-list">
+          <div class="competency-item">Content Marketing Strategy</div>
+          <div class="competency-item">Brand Positioning</div>
+          <div class="competency-item">Market Research &amp; Analysis</div>
+          <div class="competency-item">Campaign Planning &amp; Execution</div>
+          <div class="competency-item">KOL / KOC Management</div>
+        </div>
+      </div>
+      <div class="competency-group">
+        <div class="competency-title">Digital &amp; Analytics</div>
+        <div class="competency-list">
+          <div class="competency-item">Google Analytics</div>
+          <div class="competency-item">HubSpot</div>
+          <div class="competency-item">Microsoft Power BI</div>
+          <div class="competency-item">Social Media Management</div>
+          <div class="competency-item">NVivo (Qualitative Analysis)</div>
+        </div>
+      </div>
+      <div class="competency-group">
+        <div class="competency-title">Tools &amp; Languages</div>
+        <div class="competency-list">
+          <div class="competency-item">Microsoft Office &amp; Oracle ERP</div>
+          <div class="competency-item">Google Business Suite</div>
+          <div class="competency-item">English (Fluent)</div>
+          <div class="competency-item">Vietnamese (Native)</div>
+          <div class="competency-item">French · Mandarin (Basic)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Strategic Projects</div>
+  <div class="projects-grid">
+
+    <div class="project-card clickable reveal" onclick="openModal('glion')">
+      <div class="project-inner">
+        <div class="project-number">01</div>
+        <div>
+          <div class="project-brand">Real-World Experience</div>
+          <div class="project-title">Glion Community Leadership</div>
+          <div class="project-desc">Built a 131-follower community in &lt;1 month. Delivered 100% sold-out luxury hospitality event with 5 industry speakers.</div>
+          <div class="project-grade">Live Project</div>
+        </div>
+        <div class="open-label">View Details</div>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="project-card clickable reveal" onclick="openModal('vietnam')">
+      <div class="project-inner">
+        <div class="project-number">02</div>
+        <div>
+          <div class="project-brand">Real-World Experience</div>
+          <div class="project-title">Premium Fashion Brand Vietnam</div>
+          <div class="project-desc">Doubled social media followers in 3 months. Managed multi-channel content strategy for luxury fashion positioning.</div>
+          <div class="project-grade">Live Project</div>
+        </div>
+        <div class="open-label">View Details</div>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="project-card clickable reveal" onclick="openModal('dubai')">
+      <div class="project-inner">
+        <div class="project-number">03</div>
+        <div>
+          <div class="project-brand">International Experience</div>
+          <div class="project-title">Dubai Global Events</div>
+          <div class="project-desc">Operational excellence across Dubai Airshow 2025, Rugby 7s, and Desert Classic. Managed guest experiences in luxury environments.</div>
+          <div class="project-grade">Live Project</div>
+        </div>
+        <div class="open-label">View Details</div>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="project-card featured clickable reveal" onclick="openModal('why-lvmh')">
+      <div class="project-inner">
+        <div class="featured-text">
+          <div class="project-brand">Strategic Insight</div>
+          <div class="project-title">Why I'm Drawn to Heritage Luxury Maisons</div>
+          <div class="project-desc">I'm drawn to brands that understand luxury isn't about price—it's about narrative, heritage, and creating emotional connections that last decades. From LVMH to Richemont, here's what draws me to each maison.</div>
+        </div>
+        <div class="featured-visual"><div class="featured-visual-text">View</div></div>
+      </div>
+    </div>
+
+    <div class="project-card clickable reveal" onclick="openModal('kerheart')">
+      <div class="project-inner">
+        <div class="project-number">04</div>
+        <div>
+          <div class="project-brand">Strategic Framework</div>
+          <div class="project-title">KerHeart360 Retail Experience</div>
+          <div class="project-desc">Designed framework assessing emotional engagement &amp; boutique consistency. Demonstrates client retention psychology central to maison positioning.</div>
+          <div class="project-grade">Framework</div>
+        </div>
+        <div class="open-label">View Details</div>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="project-card clickable reveal" onclick="openModal('tiffany')">
+      <div class="project-inner">
+        <div class="project-number">05</div>
+        <div>
+          <div class="project-brand">Heritage Brand Strategy</div>
+          <div class="project-title">Tiffany &amp; Co. Gallery Experience</div>
+          <div class="project-desc">Repositioned Tiffany as contemporary gallery for high-net-worth collectors. Strategic thinking on heritage brand evolution &amp; experiential differentiation.</div>
+          <div class="project-grade">Strategy</div>
+        </div>
+        <div class="open-label">View Details</div>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="project-card clickable reveal" onclick="openModal('burberry')">
+      <div class="project-inner">
+        <div class="project-number">06</div>
+        <div>
+          <div class="project-brand">Sustainability Strategy</div>
+          <div class="project-title">Burberry Ethical Positioning</div>
+          <div class="project-desc">Positioned sustainability as extension of craftsmanship &amp; heritage. Demonstrates how ethical sourcing strengthens luxury desirability.</div>
+          <div class="project-grade">Positioning</div>
+        </div>
+        <div class="open-label">View Details</div>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="reveal">
+  <div class="section-label">Get In Touch</div>
+  <div class="contact-text">Ready to bring <em>strategic luxury thinking</em> to your maison.</div>
+  <div class="contact-links">
+    <a href="mailto:legiaan0712@gmail.com" class="contact-link">legiaan0712@gmail.com</a>
+    <a href="https://www.linkedin.com/in/anle-profile/" target="_blank" class="contact-link">LinkedIn</a>
+    <a href="tel:+84906373729" class="contact-link">+84 906 373 729</a>
+  </div>
+  <a href="An_Le_CV.pdf" download class="btn-download">Download Full CV</a>
+</section>
+
+<footer>
+  <p>Gia An Le &mdash; Luxury Marketing Portfolio &mdash; 2026</p>
+</footer>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<div class="modal-overlay" id="modal-glion">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Glion Community<br/>Leadership Initiative</div>
+      <button class="modal-close" onclick="closeModal('glion')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Overview</div>
+        <div class="modal-text">
+          <p><strong>Role:</strong> Marketing &amp; Communications Lead for luxury hospitality event initiative.</p>
+          <p><strong>Scope:</strong> End-to-end marketing for a student-led luxury event series, managing brand communications, audience engagement, and content strategy across digital and in-person touchpoints.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Key Metrics</div>
+        <div class="modal-text">
+          <p><strong>Event Performance:</strong> 100% sold-out event with 50+ attendees + 5 high-profile speakers (Rémy Cointreau Sales Director, Panerai Retail Manager, Four Seasons Sustainability Director, and others).</p>
+          <p><strong>Community Growth:</strong> Grew event community from 0–131 followers in less than 1 month through strategic content planning.</p>
+          <p><strong>Content Engagement:</strong> Self-produced reel reached 6K+ views; collaborative media reel reached 11K+ views through editorial-driven luxury storytelling.</p>
+          <p><strong>Attendee Satisfaction:</strong> 100% positive feedback from event attendees.</p>
+        </div>
+      </div>
+      <div class="modal-highlight">"The test of a maison's strength isn't its brand heritage—it's the community it builds around that heritage. When 50 people will block their calendar for your event, you've created something worth protecting."</div>
+      <div class="modal-section">
+        <div class="modal-section-title">What This Demonstrates</div>
+        <div class="modal-text">
+          <p>This project proves my ability to: (1) Build engaged communities from zero, (2) Attract high-caliber industry voices, (3) Translate engagement metrics into real outcomes (100% sell-out, 100% satisfaction), (4) Create content that resonates with luxury audiences (6–11K views without paid media), (5) Manage end-to-end marketing from strategy to execution.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-vietnam">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Premium Fashion Brand<br/>Vietnam</div>
+      <button class="modal-close" onclick="closeModal('vietnam')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Overview</div>
+        <div class="modal-text">
+          <p><strong>Role:</strong> Social Media &amp; Content Manager for Vietnamese luxury fashion brand.</p>
+          <p><strong>Scope:</strong> Managed multi-channel social media strategy, copywriting, scheduling, visual briefing coordination, and brand consistency across platforms.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Key Metrics</div>
+        <div class="modal-text">
+          <p><strong>Follower Growth:</strong> Doubled followers within first 3 months.</p>
+          <p><strong>Content Management:</strong> Managed copywriting, scheduling, visual briefing, and brand consistency across all platforms simultaneously.</p>
+          <p><strong>Cross-functional Collaboration:</strong> Coordinated with graphic design teams to maintain cohesive visual identity across branded campaigns and content initiatives.</p>
+        </div>
+      </div>
+      <div class="modal-highlight">"Luxury brand voice isn't achieved through volume—it's achieved through consistency. Every post, every story, every interaction must reinforce the same narrative. When your audience can feel the difference between your brand and three others, you've won."</div>
+      <div class="modal-section">
+        <div class="modal-section-title">What This Demonstrates</div>
+        <div class="modal-text">
+          <p>This project proves my ability to: (1) Own multi-channel social strategy independently, (2) Deliver growth in an emerging market (Vietnam), (3) Maintain brand consistency across diverse content formats, (4) Collaborate across teams (design, marketing, leadership), (5) Understand local luxury consumer psychology and messaging nuance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-dubai">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Dubai Global<br/>Events Experience</div>
+      <button class="modal-close" onclick="closeModal('dubai')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Overview</div>
+        <div class="modal-text">
+          <p><strong>Role:</strong> Operational Support across three major luxury events in Dubai.</p>
+          <p><strong>Events:</strong> Dubai International Airshow 2025, International Rugby 7s, Hero Dubai Desert Classic.</p>
+          <p><strong>Scope:</strong> Ensured service consistency, cultural adaptability, and seamless guest experiences across international luxury environments.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Impact</div>
+        <div class="modal-text">
+          <p><strong>Operational Excellence:</strong> Delivered flawless execution across three high-profile events with diverse audiences and complex logistics.</p>
+          <p><strong>Cultural Competence:</strong> Managed guest experiences in a multicultural Middle Eastern context, demonstrating adaptability and cultural intelligence.</p>
+          <p><strong>Luxury Standards:</strong> Maintained premium service consistency and attention to detail expected in luxury hospitality environments.</p>
+        </div>
+      </div>
+      <div class="modal-highlight">"International luxury experience isn't about replicating a playbook. It's about understanding that a Dubai guest values different things than a Paris guest—and adapting while maintaining the brand code."</div>
+      <div class="modal-section">
+        <div class="modal-section-title">What This Demonstrates</div>
+        <div class="modal-text">
+          <p>This project proves my ability to: (1) Execute at scale across multiple high-profile events, (2) Adapt to international &amp; cultural contexts, (3) Maintain luxury service standards under pressure, (4) Understand guest psychology in different markets, (5) Problem-solve operationally in real-time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-why-lvmh">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Why I'm Drawn to<br/>Heritage Luxury Maisons</div>
+      <button class="modal-close" onclick="closeModal('why-lvmh')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-text">
+          <p>I'm drawn to brands that understand what I fundamentally believe: <strong>luxury isn't about price—it's about narrative, heritage, and creating emotional connections that last decades.</strong></p>
+          <p>I've identified five maisons across three luxury ecosystems that exemplify this philosophy. Here's what draws me to each:</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">LVMH Maisons</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Dior Haute Couture</div>
+        <div class="modal-text">
+          <p>Dior's craftsmanship-first positioning shows that luxury is built from the inside out. Every stitch, every fabric choice, every decision in the atelier communicates exclusivity. The "New Look" legacy isn't just history—it's a blueprint for how heritage brands lead through innovation, not imitation. I want to be part of teams that view production quality not as a cost center, but as the foundation of brand desirability.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Tiffany &amp; Co.</div>
+        <div class="modal-text">
+          <p>Tiffany's mastery of heritage reinvention fascinates me. They've proven that legacy brands can speak authentically to younger audiences—not by chasing trends, but by deepening the narrative of craftsmanship and timelessness. Their ability to maintain "the Blue Box" as an icon while building Gen Alpha connection is masterful brand strategy.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Prada Group Maisons</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Prada</div>
+        <div class="modal-text">
+          <p>Prada's intellectual approach to luxury is unique. Minimalism as a luxury statement—the belief that precision, restraint, and clarity ARE exclusivity. They've built a maison on the idea that less is earned, not default. This strategic thinking appeals to me deeply.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Miu Miu</div>
+        <div class="modal-text">
+          <p>Miu Miu proves that a maison can have a distinct voice within a larger group. Playful, confident, unapologetic—Miu Miu shows that luxury can whisper AND shout. Their ability to build a cult following while maintaining brand codes is exceptional.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Richemont Maisons</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Cartier</div>
+        <div class="modal-text">
+          <p>Cartier's mastery of high jewelry storytelling and emotional narrative is unmatched. They understand that jewelry isn't an accessory—it's a moment, a memory, a relationship. Their clienteling philosophy and community-building approach to luxury is masterclass in customer psychology.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Chaumet</div>
+        <div class="modal-text">
+          <p>Chaumet's heritage (founded 1780) combined with their modern positioning shows how to honor savoir-faire while staying culturally relevant. They're a maison that understands legacy doesn't mean stagnation.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Independent Luxury</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Graff</div>
+        <div class="modal-text">
+          <p>Graff's boldness fascinates me. In a luxury world that often whispers, Graff is unapologetic about maximalism and power. They've built a maison on the belief that luxury can be confident, statement-making, and still refined. This is strategic positioning at its finest.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">What Unites These Maisons</div>
+        <div class="modal-text">
+          <p>All of them share:</p>
+          <p>— Craftsmanship-first positioning (not trend-chasing)<br/>
+          — Distinct visual &amp; narrative codes (not generic luxury speak)<br/>
+          — Emotional connection building (not transactional selling)<br/>
+          — Heritage respected, but not reverenced (innovation within codes)<br/>
+          — Deep understanding of their specific customer psychology</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">My Contribution</div>
+        <div class="modal-text">
+          <p><strong>Emerging Market Expertise:</strong> I have on-the-ground insight into how Asian luxury consumers—particularly Vietnamese and multicultural audiences—interact with heritage brands. I can help each maison identify growth opportunities in emerging markets authentically, without diluting codes.</p>
+          <p><strong>Data-Informed Strategy:</strong> I see brand positioning, experiential marketing, and analytics as integrated discipline. Use data to understand emotional drivers → create experiences that deepen connection → measure lifetime value and brand sentiment. This is how modern heritage brands grow.</p>
+          <p><strong>Authentic Luxury Mindset:</strong> I don't treat luxury as a positioning exercise. I believe in these codes. A luxury customer evaluates whether your brand is "worth my capital and time" at every touchpoint. I'm committed to winning that evaluation.</p>
+        </div>
+      </div>
+      <div class="modal-highlight">"I want to spend my career at maisons that don't just sell beautiful things—that build communities of people who believe in the code."</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-kerheart">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">KerHeart360<br/>Retail Framework</div>
+      <button class="modal-close" onclick="closeModal('kerheart')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Overview</div>
+        <div class="modal-text">
+          <p><strong>Project Type:</strong> Strategic framework development (academic brand exploration).</p>
+          <p><strong>Scope:</strong> Designed a comprehensive luxury retail experience framework assessing emotional engagement, boutique consistency, and client retention across international retail environments.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">What I Developed</div>
+        <div class="modal-text">
+          <p><strong>Mystery Shopper Program:</strong> Coordinated mystery shopper evaluations across multiple boutiques to assess brand experience consistency.</p>
+          <p><strong>Qualitative Analysis:</strong> Translated qualitative insights into actionable retail enhancements tailored to diverse luxury consumer personas.</p>
+          <p><strong>Retention Framework:</strong> Developed methodology for measuring emotional engagement and client loyalty across luxury retail touchpoints.</p>
+        </div>
+      </div>
+      <div class="modal-highlight">"The difference between a luxury retailer and a commodity retailer is whether the customer feels seen. KerHeart360 was built to answer: How do you systematize the feeling of being known?"</div>
+      <div class="modal-section">
+        <div class="modal-section-title">Relevance to LVMH</div>
+        <div class="modal-text">
+          <p>This project demonstrates understanding of: (1) Boutique experience consistency (core to maison positioning), (2) Client psychology and retention strategy, (3) How to translate qualitative insights into scalable frameworks, (4) The strategic importance of retail experience in luxury marketing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-tiffany">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Tiffany &amp; Co.<br/>Heritage Experience</div>
+      <button class="modal-close" onclick="closeModal('tiffany')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Overview</div>
+        <div class="modal-text">
+          <p><strong>Project Type:</strong> Brand repositioning framework (academic brand exploration).</p>
+          <p><strong>Strategy:</strong> Designed a framework to position Tiffany &amp; Co. as a contemporary gallery experience for high-net-worth collectors.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Key Insight</div>
+        <div class="modal-text">
+          <p>Rather than compete on price or novelty, position Tiffany's retail locations as curator spaces—where collectors gather to appreciate craftsmanship, understand heritage, and build relationships with the brand. This transforms transactional retail into community.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Framework Components</div>
+        <div class="modal-text">
+          <p><strong>Personalized Engagement:</strong> High-touch relationship building with high-net-worth collectors through exclusive previews and heritage narratives.</p>
+          <p><strong>Experiential Differentiation:</strong> In-store experiences (masterclasses, heritage talks, curator tours) that deepen emotional connection to brand and product.</p>
+          <p><strong>Long-term Loyalty:</strong> Strategy focuses on lifetime customer value, not transaction volume.</p>
+        </div>
+      </div>
+      <div class="modal-highlight">"Legacy brands don't die because they're old. They die because they forget why they were loved in the first place. Tiffany's job isn't to become trendy—it's to remind collectors why timelessness matters."</div>
+      <div class="modal-section">
+        <div class="modal-section-title">Relevance to LVMH</div>
+        <div class="modal-text">
+          <p>This demonstrates strategic thinking around: (1) How heritage brands evolve without losing identity, (2) Collector psychology and high-net-worth customer behavior, (3) Experiential differentiation in retail, (4) Long-term loyalty strategy applicable to Dior, Givenchy, and Celine globally.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-burberry">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Burberry<br/>Sustainability Positioning</div>
+      <button class="modal-close" onclick="closeModal('burberry')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Overview</div>
+        <div class="modal-text">
+          <p><strong>Project Type:</strong> Brand positioning framework.</p>
+          <p><strong>Challenge:</strong> How to position sustainability in luxury without appearing to sacrifice exclusivity or quality.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Strategic Positioning</div>
+        <div class="modal-text">
+          <p><strong>Core Argument:</strong> Sustainability is not a compromise on luxury—it is an extension of craftsmanship, exclusivity, and heritage preservation.</p>
+          <p><strong>Ethical Sourcing as Premium Innovation:</strong> Frame responsible material sourcing not as "doing the right thing," but as "ensuring the longevity and quality of what we make."</p>
+          <p><strong>Heritage Preservation:</strong> Connect sustainability to heritage: "We are stewards of the materials, practices, and cultures that make our products possible. Protecting them protects our legacy."</p>
+        </div>
+      </div>
+      <div class="modal-highlight">"Luxury customers aren't idealistic—they're pragmatic about quality. When you position sustainability as 'ensuring your investment lasts,' you're speaking their language."</div>
+      <div class="modal-section">
+        <div class="modal-section-title">Relevance to LVMH</div>
+        <div class="modal-text">
+          <p>This demonstrates understanding of: (1) How to integrate sustainability into luxury brand narratives without diluting exclusivity, (2) The psychology of high-net-worth consumers around environmental concerns, (3) How heritage brands can lead on sustainability as a natural extension of their values—increasingly critical for LVMH's global strategy with younger luxury consumers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script>
+  // LOADER
+  const loaderEl = document.getElementById('loaderText');
+  const text = 'GIA AN LE';
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i < text.length) {
+      const span = document.createElement('span');
+      span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+      span.style.animationDelay = '0s';
+      loaderEl.appendChild(span);
+      i++;
+    } else {
+      clearInterval(interval);
+      setTimeout(() => document.getElementById('loader').classList.add('hidden'), 800);
+    }
+  }, 80);
+
+  // CURSOR (desktop only)
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  if (window.matchMedia('(pointer:fine)').matches) {
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
+    });
+    (function animateCursorRing() {
+      rx += (mx - rx - 18) * 0.12;
+      ry += (my - ry - 18) * 0.12;
+      cursorRing.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(animateCursorRing);
+    })();
+  }
+
+  // PROGRESS BAR
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    if (total > 0) progressBar.style.width = (scrolled / total * 100) + '%';
+  }, { passive: true });
+
+  // HAMBURGER
+  const navToggle = document.getElementById('navToggle');
+  const navDrawer = document.getElementById('navDrawer');
+  navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('open');
+    navDrawer.classList.toggle('open');
+    document.body.style.overflow = navDrawer.classList.contains('open') ? 'hidden' : '';
+  });
+  function closeDrawer() {
+    navToggle.classList.remove('open');
+    navDrawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // REVEAL ON SCROLL
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), idx * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // MODALS
+  function openModal(id) {
+    const overlay = document.getElementById('modal-' + id);
+    if (overlay) { overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  }
+  function closeModal(id) {
+    const overlay = document.getElementById('modal-' + id);
+    if (overlay) { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  }
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(o => {
+        o.classList.remove('open'); document.body.style.overflow = '';
+      });
+    }
+  });
+</script>
+</body>
+</html>
